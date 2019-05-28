@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         this.frameInicial();
+        this.teste();
+    }
+
+    private void teste() {
     }
 
     private void frameInicial() {
