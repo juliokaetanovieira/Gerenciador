@@ -1,6 +1,8 @@
 package br.edu.unifcv.gerenciador.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -12,11 +14,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-
+import android.view.View;
 import br.edu.unifcv.gerenciador.R;
 
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    private ViewHolder mViewHolder = new ViewHolder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +37,15 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
+        this.mViewHolder.mFloatingActionButton = findViewById(R.id.button_form);
         this.frameInicial();
-        this.teste();
+
+        this.setListener();
     }
 
-    private void teste() {
+    private void setListener() {
+
+        this.mViewHolder.mFloatingActionButton.setOnClickListener(this);
     }
 
     private void frameInicial() {
@@ -50,7 +58,9 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, fragment).commit();
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.frame_content, fragment).commit();
+
     }
 
     @Override
@@ -71,6 +81,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.button_form) {
+            Intent intent = new Intent(this, ConvidadoFormActivity.class);
+            this.startActivity(intent);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -88,18 +108,16 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
 
         Fragment fragment = null;
-        Class fragmentClass= null;
+        Class fragmentClass = null;
 
         int id = item.getItemId();
 
         if (id == R.id.nav_todos) {
             fragmentClass = TodosFragment.class;
-
         } else if (id == R.id.nav_presentes) {
-            fragmentClass = PresentFragment.class;
+            fragmentClass = PresenteFragment.class;
         } else if (id == R.id.nav_ausentes) {
             fragmentClass = AusenteFragment.class;
         }
@@ -116,5 +134,9 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private static class ViewHolder {
+        FloatingActionButton mFloatingActionButton;
     }
 }
